@@ -4,6 +4,7 @@ import getSVG from "./other/getSVG";
 
 import "./LinksSection.css";
 import { FormsContext } from "../../pages/mainPage";
+import { NavLink } from "react-router-dom";
 
 function LinksSection({ allowEdit = false ,links=[]}) {
 
@@ -20,13 +21,19 @@ function LinksSection({ allowEdit = false ,links=[]}) {
         <span >Links</span>
       </h2>
 
-    {allowEdit && <button className="link-style btn flex-center" onClick={gotoLinksEditPage}>
+
+
+    {  allowEdit&&<NavLink to={ctx.getPathToLlinksEditForm()} className="link-style btn flex-center">
       <span className="text">
       Edit links
 
       </span>
     <span dangerouslySetInnerHTML={getSVG()} className="icon-wrapper"/>
-    </button>}
+
+      </NavLink>
+      }
+
+    
 
     <div className="social-links-content flex f-column">
       {linksUI}

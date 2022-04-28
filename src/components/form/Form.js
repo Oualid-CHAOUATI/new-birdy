@@ -13,7 +13,6 @@ const FORM_SECONDARY_BTN_WRAPPER_CLASS =
 const TITLE_CLASS = "title";
 
 function Form({ array = [], title, id, btnsObj, imgUrl }) {
-  let ctx = useContext(FormsContext);
 
   const [fields, setFields] = useState([]);
 

@@ -6,7 +6,7 @@ import "./postsWrapper.css";
 const MAIN_CLASS = "posts-wrapper flex f-column ";
 
 
-function PostsWrapper() {
+function PostsWrapper({postsIDs}) {
   
   return (
     <div className={MAIN_CLASS}>

@@ -14,13 +14,12 @@ function Post({
     imgSrc:"empty",
     userID:"empty ID"
   },
+  postID,
   hashtags = [],
-  description,
-  imgSRC,
-  likes = 0,
-  comments = 0,
-  profileInfos = {},
-  date="18-02-1999"
+  content={text:"",imgSrc:""},
+  likes = [],
+  comments = [],
+  date="**-**-****"
 }) {
   
  
@@ -32,7 +31,7 @@ function Post({
       <div className="post-header flex ">
         <div className="profile-infos flex">
 
-          <ImgWrapper imgSrc={profileInfos.imgSRC}/>
+          <ImgWrapper imgSrc={userInfo.imgSrc}/>
           {/* <div className="img-wrapper">
             <img src={profileInfos.imgSRC}/>
           </div> */}
@@ -52,9 +51,9 @@ function Post({
         </div>
       </div>
       <div className="post-content">
-        <p className="post-description">{description}</p>
+        <p className="post-description">{content.text}</p>
 
-        <ImgWrapper imgSrc={imgSRC} className={"center-text"}/>
+        <ImgWrapper imgSrc={content.imgSrc} className={"center-text"}/>
       </div>
 
       <div className="post-btns flex">

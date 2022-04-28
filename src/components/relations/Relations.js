@@ -7,18 +7,13 @@ import "./relations.css";
 const MAIN_CLASS="relations flex-center center-text"
 
 
-function Relations({followers=902,followings=102}) {
+function Relations({nbFollowers=-1,nbFollowings=-1,followersImgs3=[],followingsImgs3=[]}) {
 
 
-  let followersImgs=[`https://images.pexels.com/photos/2262810/pexels-photo-2262810.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500`,
-  `https://images.pexels.com/photos/2262810/pexels-photo-2262810.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500`,
-  `https://images.pexels.com/photos/2262810/pexels-photo-2262810.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500`];
-  let followingsImgs=[`https://images.pexels.com/photos/2262810/pexels-photo-2262810.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500`,
-  `https://images.pexels.com/photos/2262810/pexels-photo-2262810.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500`,
-  `https://images.pexels.com/photos/2262810/pexels-photo-2262810.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500`];
 
-  let followerssImgsUI=arrToUi(followersImgs);
-  let followingssImgsUI=arrToUi(followingsImgs);
+
+  let followerssImgsUI=arrToUi(followersImgs3);
+  let followingssImgsUI=arrToUi(followingsImgs3);
 
   function arrToUi(arr){
     return arr.map(imgSrc=>
@@ -36,7 +31,7 @@ function Relations({followers=902,followings=102}) {
 <div class="col">
 <p>
   following
-  <div className="numbers">+{followings}</div>
+  <div className="numbers">+{nbFollowings}</div>
 </p>
 <div className="imgs-wrapper flex-center">
 {followingssImgsUI}
@@ -49,7 +44,7 @@ function Relations({followers=902,followings=102}) {
 
 <p>
   followers
-  <div className="numbers">+{followers}</div>
+  <div className="numbers">+{nbFollowers}</div>
 </p>
 <div className="imgs-wrapper flex-center">
 

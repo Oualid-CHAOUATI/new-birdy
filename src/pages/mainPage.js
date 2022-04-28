@@ -12,281 +12,289 @@ import LinksSection from "../components/LinksSection/LinksSection";
 import FormConnexion from "../components/FormConnexion/FormConnexion";
 import FormInscription from "../components/FormInscription/FormInscription";
 import SearchBar from "../components/SearchBar/SearchBar";
+import {LinksEditPage} from "./LinksEditPage"
+import { BrowserRouter, Route, Routes, useParams } from "react-router-dom";
+import {ProfilePage} from "../pages/ProfilePage"
 
 export const FormsContext = createContext();
 
-
-
-const PAGE_POSTS="pge psts"
-const PAGE_CONNECTION="pge cnction"
-const PAGE_INSCRIPTION="pge inscription"
-const PAGE_LINKSEDIT="pge lnk edit"
-const PAGE_PROFILE="pge prfl"
-const PAGE_FOLLOWERS="pge fflwsrrprfl"
-const PAGE_FOLLOWINGS="pge fflwsgssrrprfl"
-const PAGE_SEARCHBAR="pge search"
-
+const PAGE_POSTS = "pge psts";
+const PAGE_CONNECTION = "pge cnction";
+const PAGE_INSCRIPTION = "pge inscription";
+const PAGE_LINKSEDIT = "pge lnk edit";
+const PAGE_PROFILE = "pge prfl";
+const PAGE_FOLLOWERS = "pge fflwsrrprfl";
+const PAGE_FOLLOWINGS = "pge fflwsgssrrprfl";
+const PAGE_SEARCHBAR = "pge search";
 
 class MainPage extends React.Component {
   constructor(props) {
     super(props);
-    // this.state = {currentPage:<ProfileDescription/>};
-    this.bindMethods();
+    // this.bindMethods();
 
-    const {
-      gotoPostsPage,
-      gotoConnectionPage,
-      gotoInscriptionPage,
-      gotoLinksEditPage,
-      gotoProfilePage,
-      gotoFollowersPage,
-      gotoFollowingsPage,
-      gotoSearchBar,
-      data_removeLink,
-      data_addLink,
-      data_updateLink
+   
 
-    } = this;
-    this.ctxValue = {
-
-     data_removeLink,
-     data_addLink,
-     data_updateLink
-,
-    
-      gotoInscriptionPage,
-      gotoConnectionPage,
-      gotoLinksEditPage,
-      gotoProfilePage,
-      gotoFollowersPage,
-      gotoFollowingsPage,
-      gotoPostsPage,
-      gotoSearchBar
-    };
-
+   
     this.state = {
-      userInfo:{
-        ID:0,
-        imgSrc:`https://images.pexels.com/photos/11554404/pexels-photo-11554404.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500`,
-        description:"hello its me",
-       isConnected: false,
-
+      userInfo: {
+        userID: 0,
+        userName:"Empty name",
+        imgSrc: `https://images.pexels.com/photos/11554404/pexels-photo-11554404.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500`,
+        description: "hello its me ! I'm new here ^^",
+        links: ["https://www.facebook.com", "https://www.facebook.com/", "linked.fgfg"],
+        postsIDs:[],
+        followersIDs:[],
+        followingsIDs:[]
 
       },
-      currentPage: "",
-      currentPagelabel: "",
-      followers: [new Person(1, "leila").getInfosForPersonsList(),new Person(1, "lilo").getInfosForPersonsList()],
-      followings: [new Person(1, "laila").getInfosForPersonsList(),new Person(1, "laila").getInfosForPersonsList()],
-      posts: [],
-      userID: 1,
+      followers: [
+        new Person(1, "leila").getInfosForPersonsList(),
+        new Person(1, "lilo").getInfosForPersonsList(),
+      ],
+      followings: [
+        new Person(1, "laila").getInfosForPersonsList(),
+        new Person(1, "laila").getInfosForPersonsList(),
+      ],
       showNotification: false,
-      notificationMessage:"",
-      links: ["face", "insta", "linked.fgfg"],
+      notificationMessage: "",
+      
     };
-    // this.ctxValue.gotoProfilePage(this.ctxValue.userID);
-    this.gotoSearchBar()
+    this.setCTXValue()
   }
 
-  bindMethods() {
-    this.gotoConnectionPage = this.gotoConnectionPage.bind(this);
-    this.gotoInscriptionPage = this.gotoInscriptionPage.bind(this);
-    this.gotoLinksEditPage = this.gotoLinksEditPage.bind(this);
-    this.gotoProfilePage = this.gotoProfilePage.bind(this);
-    this.gotoFollowersPage = this.gotoFollowersPage.bind(this);
-    this.gotoFollowingsPage = this.gotoFollowingsPage.bind(this);
-    this.gotoPostsPage = this.gotoPostsPage.bind(this);
-    this.gotoSearchBar = this.gotoSearchBar.bind(this);
-    this.data_addLink=this.data_addLink.bind(this)
-    this.data_removeLink=this.data_removeLink.bind(this)
-    this.data_updateLink=this.data_updateLink.bind(this)
+  setCTXValue(){
+  
+    this.ctxValue = {}
+
+    this.addToCTXValue("data_addLink")
     
+    this.addToCTXValue("data_removeLink")
+    
+    this.addToCTXValue("data_updateLink");
+    
+    this.addToCTXValue("isItMyProfile")
+    
+    this.addToCTXValue("isAfollowing")
+    
+    this.addToCTXValue("getUserInfo")
+    
+    this.addToCTXValue("getUserID")
+
+// ?---------------------------------------------
+    this.addToCTXValue("getPathToLlinksEditForm")    
+    this.addToCTXValue("getPathToConnectionForm")
+    this.addToCTXValue("getPathToInscriptionForm")
+
+    this.addToCTXValue("getPathToProfile")
+    this.addToCTXValue("getPathToPosts")
+    this.addToCTXValue("getPathToSearchBar")
+    this.addToCTXValue("getPathToFollowers")
+    this.addToCTXValue("getPathToFollowings")
+    
+     
+    
+ 
+    
+
+  }
+ 
+  addToCTXValue(methodName){
+    this[methodName]=this[methodName].bind(this);
+    this.ctxValue[methodName]=this[methodName];
+  }
+  bindMethods() {
+
+  
+  
+  }
+  bindMethod(method){
+    this.method=method.bind(this)
   }
 
-  getLinkss(){
+  getLinks() {
     return this.state.links;
   }
   data_removeLink(link) {
-   
-    link=link.trim();
-    if(link=="")return;
-    
-    let index=this.state.links.indexOf(link);
-   
-    if(index<0)return;
+    link = link.trim();
+    if (link == "") return;
 
-    this.state.links.splice(index,1);
+    let index = this.state.links.indexOf(link);
 
-    this.state.links=[...this.state.links];
-    this.gotoCurrentPage()
+    if (index < 0) return;
+
+    this.state.links.splice(index, 1);
+
+    this.state.links = [...this.state.links];
+    this.saveState();
   }
 
   data_addLink(link) {
+    link = link.trim();
+    if (link == "") return;
 
-    link=link.trim();
-    if(link=="")return;
-
-    let index=this.state.links.indexOf(link);
-    if(index>0)return;
+    let index = this.state.links.indexOf(link);
+    if (index > 0) return;
 
     this.state.links.push(link);
-    this.gotoCurrentPage()
+    this.saveState();
   }
-  data_updateLink(linkValue,newLinkValue){
- 
-    
-    newLinkValue=newLinkValue.trim();
-    if(newLinkValue=="")return;
-    if(newLinkValue==linkValue)return;
-    
-    let index=this.state.links.indexOf(linkValue);
-    if(index<0)return;
+  data_updateLink(linkValue, newLinkValue) {
+    newLinkValue = newLinkValue.trim();
+    if (newLinkValue == "") return;
+    if (newLinkValue == linkValue) return;
 
-    this.state.links[index]=newLinkValue;
-    // this.state.links=[...this.state.links]
+    let index = this.state.links.indexOf(linkValue);
+    if (index < 0) return;
 
-    
-    this.showNotification("link updated succesfully")
+    this.state.links[index] = newLinkValue;
+
+    this.showNotification("link updated succesfully");
     this.hideNotification(500);
-    
-
-this.gotoCurrentPage()
-
-  }
-
- 
-  gotoSearchBar(){
-    this.state.currentPage = <SearchBar />;
-    // this.state.currentPagelabel = PAGE
-
-    this.saveState()
-  }
-  gotoCurrentPage(){
-    switch(this.state.currentPagelabel){
-    
-    case PAGE_CONNECTION:this.gotoConnectionPage();break;
-    case PAGE_INSCRIPTION:this.gotoInscriptionPage();break;
-    case PAGE_FOLLOWERS:this.gotoFollowersPage();break;
-    case PAGE_FOLLOWINGS:this.gotoFollowingsPage();break;
-    case PAGE_LINKSEDIT:this.gotoLinksEditPage();break;
-    case PAGE_POSTS:this.gotoPostsPage();break;
-    case PAGE_PROFILE:this.gotoProfilePage();break;
-    
-    
-    
-    
-    }
-      }
-  saveState(){
-    this.setState(this.state);
-  }
-  gotoConnectionPage() {
-    this.state.currentPage = <FormConnexion />;
-    this.state.currentPagelabel=PAGE_CONNECTION;
     this.saveState()
 
   }
-  gotoInscriptionPage() {
-    this.state.currentPage = <FormInscription/>;
-    this.state.currentPagelabel=PAGE_INSCRIPTION;
-    this.saveState()
-  }
-  gotoLinksEditPage() {
-    this.state.currentPage = (
-      <div>
-        <LinkModifyForm />
-        <LinksUpdateSection links={this.state.links} />
-      </div>
-    );
-    this.state.currentPagelabel=PAGE_LINKSEDIT
-
-
-    this.saveState()
-  }
-  gotoProfilePage(ID = this.state.userInfo.ID) {
-    let IAmTheUser = ID == this.state.userInfo.ID;
-    let imgSrc = IAmTheUser
-      ? this.state.userInfo.imgSrc
-      : "https://images.pexels.com/photos/7452049/pexels-photo-7452049.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500";
-    this.state.currentPage = (
-      <div>
-        <ProfileDescription imgSrc={imgSrc} />
-        <ProfileDescriptionBtns userID={ID} />
-        {IAmTheUser && (
-          <LinksSection allowEdit={IAmTheUser} links={this.state.links} />
-        )}
-      </div>
-    );
-
-    this.state.currentPagelabel=PAGE_PROFILE
-
-    this.saveState()
-
-  }
-  gotoPostsPage(userID = this.state.userID) {
-    let IAmTheUser = userID == this.state.userID;
-
-    let imgSrc =
-      IAmTheUser? this.state.imgSrc
-        : "https://images.pexels.com/photos/7452049/pexels-photo-7452049.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500";
 
   
-    this.state.currentPage = (
-      <div>
-        <ProfileDescription imgSrc={imgSrc} />
-        <ProfileDescriptionBtns userID={userID} postsButtonNeeded={false} />
-        {IAmTheUser && <PostForm imgSrc={imgSrc} userID={userID} />}
-        {/* <PostForm /> */}
-        <PostsWrapper />
-      </div>
-    );
-    this.state.currentPagelabel=PAGE_POSTS
-    this.saveState()
-
+  saveState() {
+    this.setState(this.state);
   }
 
-  gotoFollowersPage(ID) {
-    this.state.currentPage = (
-      <PersonsList list={this.state.followers} title="Followers" />
-    );
-    this.saveState()
-
+  showNotification(msg) {
+    this.state.notificationMessage = msg;
+    this.state.showNotification = true;
+    this.saveState();
   }
-  gotoFollowingsPage(ID) {
-    this.state.currentPage = (
-      <PersonsList list={this.state.followings} title="Followings" />
-    );
-    this.saveState()
+  hideNotification(time = 700) {
+    setTimeout(() => {
+      this.state.showNotification = false;
+      this.saveState();
+    }, time);
+  }
+
+getPathToProfile(userID){
+  return `/profile/${userID}`
+}
+getPathToPosts(userID){
+  return `/profile/${userID}/posts`
+}
+getPathToSearchBar(){
+  return `/searchBar`
+}
+getPathToFollowers(userID){
+  return `/followers/${userID}`
+}
+getPathToFollowings(userID){
+  return `/followings/${userID}`
+}
+
+getPathToConnectionForm(){
+  return `/connectionForm`
+}
+getPathToInscriptionForm(){
+  return `/inscriptionForm`
+}
+getPathToLlinksEditForm(){
+  return `/linksEditForm`
+}
+isItMyProfile(userID){
+  return userID==this.state.userInfo.userID;
+}
+
+isAfollowing(userID){
+  return this.state.userInfo.followingsIDs.includes(userID)
+
+}
+
+
+getUserInfo(userID){
+ let isItMyProfile= (this.isItMyProfile(userID))
  
-  }
-  showNotification(msg){
-    this.state.notificationMessage=msg;
-    this.state.showNotification=true;
-    this.saveState()
-
-    
-  }
-  hideNotification(time=700){
-    setTimeout(()=>{
-      this.state.showNotification=false;
-      this.saveState()
+ 
+ if(isItMyProfile)return this.state.userInfo;
+ return  this.state.userInfo
+}
 
 
-    },time)
+getUserID(){
+  return this.state.userInfo.userID;
+}
 
-
-  }
   render() {
     const ctxValue = this.ctxValue;
     return (
-      <FormsContext.Provider value={ctxValue}>
+      <BrowserRouter>
+        <FormsContext.Provider value={ctxValue}>
+          <div
+            className={
+              `notification flex-center ` +
+              ((!this.state.showNotification && " hide ") || "")
+            }
+          >
+            {this.state.notificationMessage}
+          </div>
+          <NavigationPannel userID={this.state.userInfo.ID} />
 
-        <div className={`notification flex-center `+(!this.state.showNotification&&" hide "||"")}>{this.state.notificationMessage}</div>
-        <NavigationPannel userID={this.ctxValue.userID} />
+          <div className="container-max-width x-margin-auto">
+            <Routes>
+              <Route
+                path="/profile/:id"
+                element={ <ProfilePage/> }
+              />
+              <Route path="/" element={<ProfileDescription/>}/>
+              
+              <Route
+                path="/profile/:id/posts"
+                element={(() => {
+                  // let {id}=useParams();
+                  let id=0;
+                  let isItMyProfile = id == this.state.userInfo.ID;
 
-        <div className="container-max-width x-margin-auto">
-          {this.state.currentPage}
-        </div>
-      </FormsContext.Provider>
+                  let imgSrc = isItMyProfile
+                    ? this.state.userInfo.imgSrc
+                    : "https://images.pexels.com/photos/7452049/pexels-photo-7452049.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500";
+                  return (
+                    <div>
+                      <ProfileDescription imgSrc={imgSrc} />
+                      <ProfileDescriptionBtns
+                        userID={id}
+                        postsButtonNeeded={false}
+                      />
+                      {isItMyProfile && (
+                        <PostForm imgSrc={imgSrc} userID={id} />
+                      )}
+                      <PostsWrapper />
+                    </div>
+                  );
+                })()}
+              />
+
+              <Route path="/searchBar" element={<SearchBar />} />
+              <Route
+                path="/followers/:id"
+                element={
+                  <PersonsList list={this.state.followers} title="Followers" />
+                }
+              />
+              <Route
+                path="/followings/:id"
+                element={
+                  <PersonsList
+                    list={this.state.followings}
+                    title="Followings"
+                  />
+                }
+              />
+              <Route path="/connectionForm" element={<FormConnexion />} />
+              <Route path="/inscriptionForm" element={<FormInscription />}/>
+              <Route
+                path="/linksEditForm"
+                element={<LinksEditPage/>
+                }
+              />
+            </Routes>
+          </div>
+        </FormsContext.Provider>
+      </BrowserRouter>
     );
   }
 }
